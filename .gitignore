@@ -11,3 +11,4 @@ application/logs/*
 application/config/*
 index.php
 *.jpg
+/index.php

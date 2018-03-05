@@ -41,5 +41,9 @@ class Admin extends MY_Controller{
         $this->template->call_backend_template($data);
     }
 
+    public function orders(){
+        
+    }
+
 }
 

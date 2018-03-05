@@ -100,14 +100,14 @@ class User extends MY_Controller
 			if($user->user_type_id == 1)
 			{
 				$this->session->set_userdata([
-					'user_id' => $user->id,
+					'user_id' => $user->user_id,
 					'is_logged_in' => TRUE
 				]);
 				redirect(base_url() . 'admin');
 			}
 			else if($user->user_type_id == 2){
 				$this->session->set_userdata([
-					'user_id' => $user->id,
+					'user_id' => $user->user_id,
 					'is_logged_in' => TRUE
 				]);
 				redirect(base_url() . 'home');
@@ -120,6 +120,26 @@ class User extends MY_Controller
 		}
 	}
 
+	function auth()
+	{
+		$user = $this->M_user->get_active_user($this->input->post('email_address'));
+		if($user && $this->hash->passwordCheck($this->input->post('password'), $user->password))
+		{
+			$this->session->set_userdata([
+				'customer_id' => $user->user_id,
+				'is_logged_in' => TRUE
+			]);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+		return false;
+	}
+	
 	function create_user_table()
 	{
 		$user_table = '';
@@ -141,8 +161,8 @@ class User extends MY_Controller
 				}
 				else
 				{
-					$confirmed_column = '<td><span class = "label label-danger">Not Confrimed</span></td>';
-					$action_column = '<td><a href="'.$delete_path.'/'.$user->customer_id.'"><button class="btn btn-danger">Delete Account</button></a></td>';
+					$confirmed_column = '<td><span class = "label label-danger">Not Confrimed</span><a href = "#" style = "color: green;"><i class = "fa fa-check"></i></a></td>';
+					$action_column = '<td><a href="<?php echo base_url();?>user/delete/'.$user->user_id.'"><button class="btn btn-danger">Delete Account</button></a></td>';
 				}
 				if ($user->status == 0){
 					$status_column = '<td><span class = "label label-primary">Active</span></td>';

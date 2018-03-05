@@ -9,20 +9,13 @@ class Hash extends MY_Controller
 	}
 
 	public function password($password)
-	{	
-		return $this->hash($password);
+	{
+		return password_hash($password,PASSWORD_BCRYPT,['cost' => 10]);
 	}
 
 	public function passwordCheck($password, $hash)
 	{
-		if($this->hash($password) == $hash)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return password_verify($password, $hash);
 	}
 
 	public function hash($input)
@@ -32,11 +25,6 @@ class Hash extends MY_Controller
 
 	public function hashCheck($known, $user)
 	{
-		if ($known == $user) {
-			return true;
-		}
-		else{
-			return false;
-		}
+		return hash_equals($known, $user);
 	}
 }
